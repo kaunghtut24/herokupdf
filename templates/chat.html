@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with PDF</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #336699;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-message {
+    margin-bottom: 5px;
+    padding: 15px;
+    border-radius: 15px;
+    clear: both;
+    position: relative;
+    padding-bottom: 28px;
+}
+
+.chat-message.user {
+    background-color: #e0f7fa;
+    text-align: right;
+    color: #333;
+    margin-left: 50px;
+}
+
+.chat-message.assistant {
+    background-color: #e8eaf6;
+    color: #333;
+    margin-right: 50px;
+}
+
+.copy-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 3px 10px; /* Adjust padding if needed */
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  position: absolute; /* To position it within the chat message */
+  bottom: 3px;       /* Position from the bottom */ 
+  right: 19px;      /* Position from the right */
+}
+
+.copy-button:hover {
+  background-color: #f2f2f2;
+}
+
+        form {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #336699;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat with PDF</h1>
+    <div class="chat-container">
+{% for message in history %}
+
+        <div class="chat-message {{ message.role }}">
+            <strong class="timestamp">{{ message.timestamp }}</strong>
+            <strong>{{ message.role | capitalize }}:</strong>
+            <span class="message-content">{{ message.content }}</span>
+            {% if message.role == 'assistant' %} 
+        <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+    {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <form action="/chat/{{ source_id }}" method="post">
+        <input type="text" name="user_message" id="userMessage" placeholder="Type your message..." required autofocus>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        function copyToClipboard(button) {
+            const chatMessage = button.closest('.chat-message');
+            const messageContent = chatMessage.querySelector('.message-content').textContent;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = messageContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
