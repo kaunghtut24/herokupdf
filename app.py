@@ -179,6 +179,6 @@ def chat(source_id):
 
 
 if __name__ == "__main__":
-    port = 5555  # Your desired port
+    port = 0  # Use the first available port
     print(f"Starting Flask app on port {port}")
-    app.run(debug=True, port=5555)
+    app.run(debug=True, host='0.0.0.0', port=port)
