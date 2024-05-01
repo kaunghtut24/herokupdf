@@ -22,12 +22,22 @@
         {% endif %}
     {% endwith %}
 
+    <h2>Upload Options</h2>  <!-- Added heading for clarity -->
+
     <form action="/upload" method="post" enctype="multipart/form-data">
         <div>
             <label for="pdfFile">Upload PDF File:</label>
             <input type="file" name="file" id="pdfFile" accept=".pdf" required>
         </div>
-        <button type="submit">Upload</button>
+        <button type="submit">Upload File</button>  <!-- Changed button text for clarity -->
+    </form>
+
+    <form action="/upload_url" method="post">
+        <div>
+            <label for="pdfUrl">Enter PDF URL:</label>
+            <input type="text" name="url" id="pdfUrl" placeholder="Enter PDF URL" required>
+        </div>
+        <button type="submit">Submit URL</button>
     </form>
 </body>
 </html>
