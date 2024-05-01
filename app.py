@@ -64,7 +64,7 @@ def add_pdf_via_url(url):
     data = {'url': url}
 
     print("Sending request with URL:", url)
-    print("Headers:", headers)
+    print("Headers: {'Content-Type': 'application/json'}")
     print("JSON data:", data)
 
     try:
